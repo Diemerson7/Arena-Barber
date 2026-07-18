@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <!-- Background (Mantido original) -->
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=2074" 
+             class="w-full h-full object-cover opacity-40 animate-hero-bg">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/80 to-[#050505]"></div>
+    </div>
+
+    <!-- Conteúdo: Agora com 'text-center' e fontes responsivas -->
+    <div class="relative z-10 text-center px-4 w-full">
+        <span class="text-cyan-400 tracking-[0.4em] md:tracking-[0.8em] uppercase text-[8px] md:text-[10px] font-bold mb-4 block">The Ultimate Grooming Experience</span>
+        
+        <h1 class="font-black leading-none uppercase mb-8">
+            <!-- ARENA: Menor no mobile, Gigante no PC -->
+            <span class="block text-5xl md:text-8xl text-white opacity-20">ARENA</span>
+            <!-- BARBER: Redimensionado para caber na largura do celular -->
+            <span class="block text-6xl md:text-[130px] italic-luxury -mt-6 md:-mt-16">BARBER</span>
+        </h1>
+
+        <!-- Botões centralizados com o 'mx-auto' -->
+        <div class="flex flex-col items-center gap-6 mt-10">
+            <a href="/agendar" class="btn-arena w-full max-w-[260px] md:w-64">AGENDAR AGORA</a>
+            <a href="#servicos" class="text-[10px] font-bold uppercase tracking-[3px] border-b border-white/10 pb-1 hover:border-cyan-400 transition-all">
+                Conheça nossos serviços
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Menu de Especialidades (Mantendo o design original) -->
+<section id="servicos" class="py-20 md:py-32 px-6">
+    <div class="max-w-6xl mx-auto">
+        <h2 class="text-4xl md:text-6xl font-black uppercase italic-luxury mb-16 text-center md:text-left">
+            Menu de <br><span class="text-cyan-400">Especialidades</span>
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-x-20 gap-y-12">
+            {% for servico in servicos %}
+            <div class="service-item group">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-lg md:text-xl font-bold group-hover:text-cyan-400 transition">{{ servico.name }}</h3>
+                    <div class="service-line"></div>
+                    <span class="text-cyan-400 font-bold">R$ {{ "%.2f"|format(servico.price) }}</span> <!-- AQUI ESTAVA O ERRO! AGORA É 'servico.price' -->
+                </div>
+                <p class="text-gray-500 text-[10px] md:text-[12px] uppercase tracking-[1px]">{{ servico.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

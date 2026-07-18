@@ -1,0 +1,122 @@
+/* Configurações Gerais */
+:root {
+    --arena-black: #050505;
+    --arena-cyan: #00f2ff;
+    --arena-dark: #0a0a0a;
+    --arena-gray: #1a1a1a;
+}
+
+body { 
+    background-color: var(--arena-black); 
+    color: white; 
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Tipografia Luxuosa */
+h1, h2, h3 { 
+    font-weight: 800; 
+    text-transform: uppercase;
+    letter-spacing: -1px;
+}
+
+.italic-luxury {
+    font-style: italic;
+    background: linear-gradient(to right, var(--arena-cyan), #5eead4);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Atualize a classe glass-nav no seu CSS */
+.glass-nav {
+    background: rgba(5, 5, 5, 0.8); /* Fundo um pouco mais escuro para melhor leitura */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Borda muito sutil */
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); /* Sombra suave, sem 'linhas' */
+}
+
+/* Garante que o header não tenha bordas fantasmas */
+header {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Botões Arena */
+.btn-arena {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 11px;
+    border: 2px solid var(--arena-cyan);
+    color: var(--arena-cyan);
+    padding: 14px 32px;
+    letter-spacing: 2px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn-arena:hover {
+    background: var(--arena-cyan);
+    color: black;
+    box-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
+    transform: translateY(-3px);
+}
+
+/* Efeitos de Grid de Serviços */
+.service-item {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid var(--arena-gray);
+    padding-bottom: 1rem;
+}
+
+.service-item:hover {
+    border-color: var(--arena-cyan);
+}
+
+.service-line {
+    height: 1px;
+    flex-grow: 1;
+    margin: 0 15px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.5s ease;
+}
+
+.service-item:hover .service-line {
+    background: var(--arena-cyan);
+    opacity: 0.3;
+}
+
+/* Animações */
+@keyframes subtle-zoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+}
+
+.animate-hero-bg {
+    animation: subtle-zoom 20s infinite alternate;
+}
+
+/* Scrollbar Personalizada */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--arena-black); }
+::-webkit-scrollbar-thumb { background: var(--arena-gray); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--arena-cyan); }
+
+/* Utilitários */
+.cyan-glow { text-shadow: 0 0 20px rgba(0, 242, 255, 0.4); }
+.bg-card { background-color: var(--arena-dark); border: 1px solid var(--arena-gray); }
+
+@media (max-width: 768px) {
+    /* Ajusta o tamanho da logo no celular para não bater nos botões */
+    .text-sm {
+        font-size: 0.85rem;
+    }
+    /* Dá um espaço extra para o conteúdo não bater na navbar fixa */
+    section {
+        padding-top: 80px;
+    }
+}

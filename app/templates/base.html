@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arena Barber</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon3.png') }}" type="image/x-icon">
+    <!-- 1. Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 2. Fonte Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- 3. CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-[#050505] text-white font-['Poppins']">
+
+<!-- NAVBAR -->
+<header class="fixed w-full top-4 md:top-6 z-50 px-2 md:px-4 bg-transparent border-none">
+    <nav class="max-w-[98%] md:max-w-5xl mx-auto glass-nav py-3 md:py-4 px-3 md:px-8 rounded-full flex justify-between items-center shadow-xl relative border border-white/10">
+        
+        <!-- ESQUERDA: Home e Admin (Mobile) -->
+        <div class="flex items-center gap-2">
+            <a href="/" class="text-white hover:text-cyan-400 md:hidden p-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+            </a>
+
+            {% if current_user.is_admin %}
+                <a href="/admin" class="md:hidden bg-cyan-400 text-black px-2 py-1 rounded-full text-[7px] font-black uppercase tracking-tighter">
+                    Admin
+                </a>
+            {% endif %}
+
+            <a href="/" class="hidden md:block text-[10px] font-bold uppercase tracking-widest hover:text-cyan-400 transition">Home</a>
+            <a href="#servicos" class="hidden md:block text-[10px] font-bold uppercase tracking-widest hover:text-cyan-400 transition">Serviços</a>
+        </div>
+
+        <!-- LOGO CENTRAL -->
+        <div class="text-sm md:text-xl font-extrabold tracking-[2px] md:tracking-[4px] absolute left-1/2 -translate-x-1/2 whitespace-nowrap px-1">
+            <span class="text-cyan-400">ARENA</span><span class="text-white ml-1">BBR</span>
+        </div>
+
+        <!-- DIREITA: Agenda e Sair -->
+        <div class="flex items-center gap-3 md:gap-6">
+            <a href="/agendar" class="hidden md:block text-[10px] font-bold uppercase tracking-widest hover:text-cyan-400 transition">Reservar</a>
+
+            {% if current_user.is_authenticated %}
+                {% if current_user.is_admin %}
+                    <a href="/admin" class="hidden md:block bg-cyan-400 text-black px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-[0_0_15px_rgba(0,242,255,0.4)]">
+                        Admin
+                    </a>
+                {% endif %}
+
+                <a href="/meus-horarios" class="text-cyan-400 p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v12a2 2 0 002 2z" />
+                    </svg>
+                </a>
+
+                <a href="/logout" class="text-red-500 text-[9px] md:text-[10px] font-bold uppercase hover:text-white transition">
+                    Sair
+                </a>
+            {% else %}
+                <a href="/login" class="text-white hover:text-cyan-400 p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </a>
+            {% endif %}
+        </div>
+    </nav>
+</header>
+
+    <!-- Alertas de Mensagens -->
+    <div id="flash-alerts" class="fixed top-24 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="text-center p-4 rounded-xl mb-4 shadow-2xl animate-bounce 
+                {% if category == 'success' %} bg-green-500/10 border border-green-500 text-green-500 
+                {% elif category == 'danger' %} bg-red-500/10 border border-red-500 text-red-500 
+                {% else %} bg-cyan-400/10 border border-cyan-400 text-cyan-400 {% endif %}">
+                <p class="text-xs font-bold uppercase tracking-widest">{{ message }}</p>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <footer class="py-10 text-center text-gray-600 text-[10px] uppercase tracking-widest">
+        &copy; 2024 Arena Barber. Todos os direitos reservados.
+    </footer>
+
+    <script>
+    // Função para fazer o pop-up sumir
+    setTimeout(function() {
+        let alerts = document.getElementById('flash-alerts');
+        if (alerts) {
+            // Primeiro ele fica transparente (efeito fade-out)
+            alerts.style.opacity = '0';
+            
+            // Depois de 1 segundo (tempo da animação), ele é removido do HTML
+            setTimeout(function() {
+                alerts.remove();
+            }, 1000);
+        }
+    }, 4000); // 4000ms = 4 segundos exibido antes de começar a sumir
+</script>
+</body>
+</html>

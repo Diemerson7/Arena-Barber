@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="pt-32 pb-20 px-6 max-w-5xl mx-auto">
+    <div class="text-center mb-16">
+        <h2 class="text-5xl font-black uppercase italic-luxury mb-4">Reserve seu <br> <span class="text-cyan-400">Momento</span></h2>
+        <p class="text-gray-500 text-[10px] uppercase tracking-[3px]">Precisão e Estilo em cada detalhe</p>
+    </div>
+
+    <form action="/agendar" method="POST" class="space-y-16">
+        <!-- PASSO 1: SELECIONAR SERVIÇO -->
+        <div>
+            <h3 class="text-white text-xs font-bold uppercase tracking-widest mb-8 flex items-center gap-4">
+                <span class="bg-cyan-400 text-black h-6 w-6 rounded-full flex items-center justify-center text-[10px]">01</span>
+                Escolha o Serviço
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+                {% for s in services %}
+                <label class="cursor-pointer group">
+                    <input type="radio" name="service_id" value="{{ s.id }}" class="hidden peer" required>
+                    <div class="p-6 bg-[#0a0a0a] border border-white/5 rounded-2xl peer-checked:border-cyan-400 peer-checked:bg-cyan-400/5 transition-all">
+                        <div class="flex justify-between items-center">
+                            <span class="text-white font-bold uppercase tracking-wider group-hover:text-cyan-400">{{ s.name }}</span>
+                            <span class="text-cyan-400 font-mono">R$ {{ "%.2f"|format(s.price) }}</span>
+                        </div>
+                        <p class="text-gray-600 text-[10px] mt-2 uppercase tracking-tighter">{{ s.description }}</p>
+                    </div>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- PASSO 2: SELECIONAR BARBEIRO -->
+        <div>
+            <h3 class="text-white text-xs font-bold uppercase tracking-widest mb-8 flex items-center gap-4">
+                <span class="bg-cyan-400 text-black h-6 w-6 rounded-full flex items-center justify-center text-[10px]">02</span>
+                Escolha o Profissional
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {% for b in barbers %}
+                <label class="cursor-pointer group text-center">
+                    <input type="radio" name="barber_id" value="{{ b.id }}" class="hidden peer" required>
+                    <div class="relative mb-4">
+                        <img src="{{ url_for('static', filename='img/barbers/' + b.profile_img) if b.profile_img != 'default_barber.jpg' else 'https://ui-avatars.com/api/?name='+b.name+'&background=0D0D0D&color=00f2ff' }}" 
+                             class="w-full aspect-square object-cover rounded-2xl border-2 border-white/5 peer-checked:border-cyan-400 transition-all grayscale group-hover:grayscale-0 peer-checked:grayscale-0">
+                        <div class="absolute inset-0 rounded-2xl peer-checked:bg-cyan-400/10 transition-all"></div>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase text-gray-500 peer-checked:text-cyan-400">{{ b.name }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- PASSO 3: DATA E HORA -->
+        <div class="grid md:grid-cols-2 gap-10">
+            <div>
+                <h3 class="text-white text-xs font-bold uppercase tracking-widest mb-8 flex items-center gap-4">
+                    <span class="bg-cyan-400 text-black h-6 w-6 rounded-full flex items-center justify-center text-[10px]">03</span>
+                    Data
+                </h3>
+                <input type="date" name="date" id="booking_date" required 
+                class="w-full bg-[#0a0a0a] border border-white/10 p-4 rounded-2xl text-white outline-none focus:border-cyan-400 transition appearance-none">
+            </div>
+            <div>
+                <h3 class="text-white text-xs font-bold uppercase tracking-widest mb-8 flex items-center gap-4">
+                    <span class="bg-cyan-400 text-black h-6 w-6 rounded-full flex items-center justify-center text-[10px]">04</span>
+                    Horário
+                </h3>
+                <div class="grid grid-cols-3 gap-2">
+                    {% for t in times %}
+                    <label class="cursor-pointer">
+                        <input type="radio" name="time" value="{{ t }}" class="hidden peer" required>
+                        <div class="py-3 bg-[#0a0a0a] border border-white/5 rounded-xl text-center text-[10px] font-bold text-gray-500 peer-checked:bg-cyan-400 peer-checked:text-black transition-all">
+                            {{ t }}
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="w-full btn-arena py-6 text-sm">Confirmar Agendamento</button>
+    </form>
+</section>
+
+<script>
+    // Define a data mínima como HOJE para evitar agendamentos retroativos
+    document.getElementById('booking_date').min = new Date().toISOString().split("T")[0];
+</script>
+{% endblock %}

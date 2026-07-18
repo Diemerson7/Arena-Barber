@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="pt-32 pb-20 px-6 max-w-4xl mx-auto min-h-screen">
+    <div class="mb-12">
+        <h2 class="text-5xl font-black uppercase italic-luxury leading-tight">Meus <br><span class="text-cyan-400">Horários</span></h2>
+        <p class="text-gray-500 text-[10px] uppercase tracking-[3px] mt-4 font-bold">Gerencie suas reservas na Arena Barber</p>
+    </div>
+
+    <div class="grid gap-6">
+        {% for appt in agendamentos %}
+        <div class="bg-[#0a0a0a] p-8 rounded-3xl border border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 group hover:border-cyan-400/30 transition-all duration-500">
+            <div class="flex items-center gap-8 w-full md:w-auto">
+                <!-- Data e Hora -->
+                <div class="text-center border-r border-white/10 pr-8 min-w-[100px]">
+                    <span class="block text-3xl font-black text-white leading-none">{{ appt.time.strftime('%H:%M') }}</span>
+                    <span class="block text-[10px] text-cyan-400 uppercase font-bold mt-2 tracking-widest">{{ appt.date.strftime('%d/%m') }}</span>
+                </div>
+                <!-- Detalhes -->
+                <div>
+                    <span class="block text-gray-500 text-[9px] uppercase font-bold tracking-widest mb-1">Serviço</span>
+                    <h4 class="text-white font-bold uppercase text-lg leading-tight">{{ appt.service.name }}</h4>
+                    <p class="text-cyan-400 text-[10px] font-bold uppercase tracking-widest mt-1">Barbeiro: {{ appt.barber.name }}</p>
+                </div>
+            </div>
+
+            <!-- Botão de Cancelar -->
+            <form action="{{ url_for('cancel_appointment', id=appt.id) }}" method="POST" onsubmit="return confirm('Deseja realmente cancelar este horário?')">
+                <button type="submit" class="text-red-500 text-[10px] font-bold uppercase tracking-[2px] border border-red-500/20 px-6 py-4 rounded-xl hover:bg-red-500 hover:text-white transition-all">
+                    Cancelar Horário
+                </button>
+            </form>
+        </div>
+        {% else %}
+        <!-- Caso não tenha agendamentos -->
+        <div class="text-center py-20 bg-[#0a0a0a] rounded-3xl border border-dashed border-white/10">
+            <p class="text-gray-500 uppercase text-xs tracking-widest mb-6">Você ainda não possui horários marcados.</p>
+            <a href="/agendar" class="btn-arena">Agendar Agora</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="mt-12 text-center">
+        <a href="/" class="text-gray-600 hover:text-white text-[10px] font-bold uppercase tracking-widest transition">← Voltar para o Início</a>
+    </div>
+</section>
+{% endblock %}

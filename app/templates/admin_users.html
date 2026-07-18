@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="pt-32 pb-20 px-6 max-w-5xl mx-auto">
+    <h2 class="text-4xl font-black uppercase italic-luxury mb-10">Gerenciar Usuários</h2>
+    
+    <div class="grid gap-4">
+        {% for u in usuarios %}
+        <div class="flex justify-between items-center bg-white/5 p-6 rounded-2xl border border-white/5">
+            <div>
+                <span class="font-bold text-white">{{ u.username }}</span>
+                <p class="text-gray-500 text-xs">{{ u.email }}</p>
+            </div>
+            <div class="flex items-center gap-4">
+                {% if u.is_admin %}
+                    <span class="text-[10px] bg-cyan-400/20 text-cyan-400 px-2 py-1 rounded">ADMIN</span>
+                {% endif %}
+                <a href="/admin/delete-user/{{ u.id }}" 
+                   onclick="return confirm('Tem certeza que deseja deletar este usuário?')"
+                   class="text-red-500 hover:text-white text-xs font-bold uppercase">Deletar</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <a href="/admin" class="inline-block mt-10 text-cyan-400 text-xs font-bold uppercase tracking-widest">← Voltar ao Painel</a>
+</section>
+{% endblock %}

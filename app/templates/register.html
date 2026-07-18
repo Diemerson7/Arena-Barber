@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="h-screen flex items-center justify-center px-4 pt-20">
+    <div class="max-w-md w-full bg-[#0a0a0a] p-10 rounded-3xl border border-white/5 shadow-2xl">
+        
+        <!-- Ícone e Título (Identidade visual igual ao Login) -->
+        <div class="text-center mb-10">
+            <div class="inline-block p-4 rounded-full bg-cyan-400/10 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold tracking-tight uppercase">Criar sua <br><span class="text-cyan-400 italic">Conta</span></h2>
+            <p class="text-gray-500 text-[10px] uppercase tracking-[2px] mt-2">Junte-se à elite da Arena Barber</p>
+        </div>
+
+        <form method="POST" class="space-y-5">
+            <div>
+                <label class="block text-[10px] font-bold uppercase tracking-[2px] mb-2 text-gray-500">Nome de Usuário</label>
+                <input type="text" name="username" required 
+                       class="w-full bg-black border border-white/10 p-4 rounded-xl focus:border-cyan-400 outline-none transition text-white placeholder-gray-700"
+                       placeholder="Ex: joao_barber">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-bold uppercase tracking-[2px] mb-2 text-gray-500">E-mail</label>
+                <input type="email" name="email" required 
+                       class="w-full bg-black border border-white/10 p-4 rounded-xl focus:border-cyan-400 outline-none transition text-white placeholder-gray-700"
+                       placeholder="seu@email.com">
+            </div>
+            
+            <div>
+                <label class="block text-[10px] font-bold uppercase tracking-[2px] mb-2 text-gray-500">Sua Senha</label>
+                <input type="password" name="password" required 
+                       class="w-full bg-black border border-white/10 p-4 rounded-xl focus:border-cyan-400 outline-none transition text-white placeholder-gray-700"
+                       placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="w-full btn-arena py-4 mt-4">Cadastrar</button>
+        </form>
+
+        <!-- Link para Voltar ao Login -->
+        <div class="mt-8 pt-6 border-t border-white/5 text-center">
+            <p class="text-gray-500 text-sm">Já tem uma conta?</p>
+            <a href="/login" class="text-cyan-400 font-bold uppercase text-xs tracking-widest hover:underline mt-2 inline-block">
+                Acesse aqui
+            </a>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
