@@ -17,6 +17,7 @@ class Service(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Float, nullable=False)
+    duration = db.Column(db.Integer, default=60) # Tempo em minutos
     description = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     appointments = db.relationship('Appointment', backref='service', lazy=True) # Relacionamento com Agendamentos
@@ -43,3 +44,9 @@ class Appointment(db.Model):
     
     status = db.Column(db.String(20), default='Agendado') # Agendado, Cancelado, Concluído
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+# Feriados (para bloquear datas específicas)
+class Holiday(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date, unique=True, nullable=False)
+    description = db.Column(db.String(100)) # Ex: "Natal", "Folga Coletiva"

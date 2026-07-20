@@ -22,14 +22,26 @@
                             <span class="text-white font-bold uppercase tracking-wider group-hover:text-cyan-400">{{ s.name }}</span>
                             <span class="text-cyan-400 font-mono">R$ {{ "%.2f"|format(s.price) }}</span>
                         </div>
-                        <p class="text-gray-600 text-[10px] mt-2 uppercase tracking-tighter">{{ s.description }}</p>
+                        
+                        <!-- AQUI ESTÁ A CORREÇÃO: Mostrando o tempo em vez do 'None' -->
+                        <p class="text-gray-500 text-[10px] mt-2 uppercase tracking-widest">
+                            <i class="far fa-clock mr-1"></i>
+                            {% if s.duration < 60 %}
+                                {{ s.duration }} MINUTOS
+                            {% else %}
+                                {% set horas = (s.duration // 60) %}
+                                {% set minutos = (s.duration % 60) %}
+                                {{ horas }} {% if horas > 1 %}HORAS{% else %}HORA{% endif %}
+                                {% if minutos > 0 %}{{ minutos }} MIN{% endif %}
+                            {% endif %}
+                        </p>
                     </div>
                 </label>
                 {% endfor %}
             </div>
         </div>
 
-        <!-- PASSO 2: SELECIONAR BARBEIRO -->
+        <!-- PASSO 2: BARBEIRO -->
         <div>
             <h3 class="text-white text-xs font-bold uppercase tracking-widest mb-8 flex items-center gap-4">
                 <span class="bg-cyan-400 text-black h-6 w-6 rounded-full flex items-center justify-center text-[10px]">02</span>
@@ -38,11 +50,10 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {% for b in barbers %}
                 <label class="cursor-pointer group text-center">
-                    <input type="radio" name="barber_id" value="{{ b.id }}" class="hidden peer" required>
+                    <input type="radio" name="barber_id" value="{{ b.id }}" class="barber-selector hidden peer" required>
                     <div class="relative mb-4">
                         <img src="{{ url_for('static', filename='img/barbers/' + b.profile_img) if b.profile_img != 'default_barber.jpg' else 'https://ui-avatars.com/api/?name='+b.name+'&background=0D0D0D&color=00f2ff' }}" 
-                             class="w-full aspect-square object-cover rounded-2xl border-2 border-white/5 peer-checked:border-cyan-400 transition-all grayscale group-hover:grayscale-0 peer-checked:grayscale-0">
-                        <div class="absolute inset-0 rounded-2xl peer-checked:bg-cyan-400/10 transition-all"></div>
+                            class="w-full aspect-square object-cover rounded-2xl border-2 border-white/5 peer-checked:border-cyan-400 transition-all grayscale group-hover:grayscale-0 peer-checked:grayscale-0">
                     </div>
                     <span class="text-[10px] font-bold uppercase text-gray-500 peer-checked:text-cyan-400">{{ b.name }}</span>
                 </label>
@@ -50,40 +61,117 @@
             </div>
         </div>
 
-        <!-- PASSO 3: DATA E HORA -->
-        <div class="grid md:grid-cols-2 gap-10">
-            <div>
-                <h3 class="text-white text-xs font-bold uppercase tracking-widest mb-8 flex items-center gap-4">
-                    <span class="bg-cyan-400 text-black h-6 w-6 rounded-full flex items-center justify-center text-[10px]">03</span>
-                    Data
-                </h3>
-                <input type="date" name="date" id="booking_date" required 
-                class="w-full bg-[#0a0a0a] border border-white/10 p-4 rounded-2xl text-white outline-none focus:border-cyan-400 transition appearance-none">
-            </div>
-            <div>
-                <h3 class="text-white text-xs font-bold uppercase tracking-widest mb-8 flex items-center gap-4">
-                    <span class="bg-cyan-400 text-black h-6 w-6 rounded-full flex items-center justify-center text-[10px]">04</span>
-                    Horário
-                </h3>
-                <div class="grid grid-cols-3 gap-2">
-                    {% for t in times %}
-                    <label class="cursor-pointer">
-                        <input type="radio" name="time" value="{{ t }}" class="hidden peer" required>
-                        <div class="py-3 bg-[#0a0a0a] border border-white/5 rounded-xl text-center text-[10px] font-bold text-gray-500 peer-checked:bg-cyan-400 peer-checked:text-black transition-all">
-                            {{ t }}
-                        </div>
-                    </label>
-                    {% endfor %}
-                </div>
+        <!-- PASSO 3: DATA -->
+        <div class="mt-16">
+            <h3 class="text-white text-xs font-bold uppercase tracking-widest mb-8 flex items-center gap-4">
+                <span class="bg-cyan-400 text-black h-6 w-6 rounded-full flex items-center justify-center text-[10px]">03</span>
+                Data do Agendamento
+            </h3>
+            <input type="date" name="date" id="booking_date" required 
+                class="w-full max-w-md bg-[#0a0a0a] border border-white/10 p-4 rounded-2xl text-white outline-none focus:border-cyan-400 transition">
+        </div>
+
+        <!-- PASSO 4: HORÁRIO (Onde a mágica acontece) -->
+        <div class="mt-16">
+            <h3 class="text-white text-xs font-bold uppercase tracking-widest mb-8 flex items-center gap-4">
+                <span class="bg-cyan-400 text-black h-6 w-6 rounded-full flex items-center justify-center text-[10px]">04</span>
+                Horários Disponíveis
+            </h3>
+            <div id="time-slots" class="grid grid-cols-3 md:grid-cols-5 gap-2">
+                <p class="text-gray-600 text-[10px] col-span-full italic">Selecione o profissional e a data acima...</p>
             </div>
         </div>
 
-        <button type="submit" class="w-full btn-arena py-6 text-sm">Confirmar Agendamento</button>
-    </form>
-</section>
+        <!-- BOTÃO DE CONFIRMAÇÃO -->
+        <div class="mt-20">
+            <button type="submit" class="w-full btn-arena py-6 text-sm shadow-[0_0_30px_rgba(0,242,255,0.1)] hover:shadow-[0_0_50px_rgba(0,242,255,0.3)] transition-all duration-500">
+                Confirmar Agendamento
+            </button>
+            <p class="text-center text-gray-600 text-[9px] uppercase tracking-[3px] mt-6">
+                Ao confirmar, seu horário será reservado instantaneamente na agenda do profissional.
+            </p>
+        </div>
 
-<script>
-    // Define a data mínima como HOJE para evitar agendamentos retroativos
-    document.getElementById('booking_date').min = new Date().toISOString().split("T")[0];
-</script>
+        <script>
+        const dateInput = document.getElementById('booking_date');
+        const timeContainer = document.getElementById('time-slots');
+        dateInput.min = new Date().toISOString().split("T")[0];
+
+        // Função que busca horários livres no servidor
+        async function refreshTimes() {
+            const barberId = document.querySelector('input[name="barber_id"]:checked')?.value;
+            const dateStr = dateInput.value;
+
+            if (!barberId || !dateStr) return;
+
+            // Limpa e mostra carregando
+            timeContainer.innerHTML = '<p class="text-cyan-400 text-[10px] animate-pulse uppercase font-bold col-span-full italic">Verificando agenda...</p>';
+
+            try {
+                const response = await fetch(`/api/get-available-times?barber_id=${barberId}&date=${dateStr}`);
+                const data = await response.json();
+
+                // Limpa novamente para colocar o resultado real
+                timeContainer.innerHTML = '';
+                
+            if (data.is_holiday) {
+                        // DESIGN PROFISSIONAL DE COMUNICADO
+                        timeContainer.innerHTML = `
+                            <div class="col-span-full bg-[#0a0a0a] border border-white/5 p-10 rounded-3xl text-center shadow-2xl animate-in fade-in zoom-in duration-500">
+                                <div class="inline-block p-4 rounded-full bg-cyan-400/5 mb-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                
+                                <h4 class="text-white text-xl font-bold uppercase tracking-[4px] mb-3">Agenda Indisponível</h4>
+                                
+                                <div class="w-12 h-0.5 bg-cyan-400 mx-auto mb-6"></div>
+                                
+                                <p class="text-gray-400 text-[11px] uppercase tracking-[2px] leading-relaxed max-w-xs mx-auto">
+                                    Infelizmente não teremos expediente nesta data devido ao seguinte motivo:
+                                </p>
+                                
+                                <p class="text-cyan-400 text-sm font-bold uppercase tracking-[1px] mt-4 italic">
+                                    "${data.reason}"
+                                </p>
+
+                                <p class="text-gray-600 text-[9px] uppercase tracking-[3px] mt-10">
+                                    Por favor, selecione outro dia em nosso calendário.
+                                </p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                if (data.slots.length === 0) {
+                    timeContainer.innerHTML = '<p class="text-gray-500 text-[10px] uppercase font-bold col-span-full">Sem horários para este profissional hoje.</p>';
+                    return;
+                }
+
+                // GERA OS SLOTS NORMAIS
+                data.slots.forEach(t => {
+                    timeContainer.innerHTML += `
+                        <label class="cursor-pointer">
+                            <input type="radio" name="time" value="${t}" class="hidden peer" required>
+                            <div class="py-3 bg-[#0a0a0a] border border-white/5 rounded-xl text-center text-[10px] font-bold text-gray-500 peer-checked:bg-cyan-400 peer-checked:text-black transition-all">
+                                ${t}
+                            </div>
+                        </label>
+                    `;
+                });
+
+            } catch (err) {
+                timeContainer.innerHTML = '<p class="text-red-500 text-[10px] uppercase font-bold col-span-full">Erro ao conectar com o servidor.</p>';
+            }
+        }
+
+        // Escuta mudanças no barbeiro e na data
+        document.querySelectorAll('.barber-selector').forEach(input => {
+            input.addEventListener('change', refreshTimes);
+        });
+        dateInput.addEventListener('change', refreshTimes);
+        </script>
+
+    </form>
 {% endblock %}

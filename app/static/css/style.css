@@ -119,4 +119,21 @@ header {
     section {
         padding-top: 80px;
     }
+
+    /* Esconde a barra de rolagem mas mantém a funcionalidade de deslizar */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Garante que as abas não quebrem linha */
+    .flex-nowrap {
+        display: flex;
+        flex-wrap: nowrap;
+    }
 }

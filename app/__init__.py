@@ -21,6 +21,9 @@ def create_app():
     bcrypt.init_app(app)
     login_manager.init_app(app)
 
+    login_manager.login_message = "Por favor, faça login para acessar esta página."
+    login_manager.login_message_category = "info"
+
     with app.app_context():
         from . import routes
         db.create_all()  # Cria o banco SQLite automaticamente

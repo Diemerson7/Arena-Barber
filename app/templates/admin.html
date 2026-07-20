@@ -10,55 +10,72 @@
         <p class="text-gray-500 text-[10px] uppercase tracking-[3px] mt-2 font-bold">Arena Barber Management</p>
     </div>
         
-        <!-- Abas de Navegação -->
-        <!-- Abas do Painel (Corrigidas para Mobile) -->
-        <div class="flex bg-white/5 p-1 rounded-full border border-white/10 w-full md:w-fit mb-12">
-            <button id="btn-servicos" onclick="showSection('servicos')" 
-                class="tab-btn flex-1 md:flex-none px-2 md:px-8 py-3 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all">
-                Serviços
-            </button>
-            <button id="btn-barbeiros" onclick="showSection('barbeiros')" 
-                class="tab-btn flex-1 md:flex-none px-2 md:px-8 py-3 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all">
-                Barbeiros
-            </button>
-            <button id="btn-usuarios" onclick="showSection('usuarios')" 
-                class="tab-btn flex-1 md:flex-none px-2 md:px-8 py-3 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all">
-                Usuários
-            </button>
-            <!-- Aba de Agenda (Opcional se você quiser gerenciar por aqui) -->
-            <button id="btn-agenda" onclick="showSection('agenda')" 
-                class="tab-btn flex-1 md:flex-none px-2 md:px-8 py-3 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all">
-                Agenda
-            </button>
+        <!-- Abas do Painel (Corrigidas para Scroll Mobile) -->
+        <div class="w-full flex justify-center mb-12">
+            <div class="flex bg-white/5 p-1 rounded-full border border-white/10 overflow-x-auto no-scrollbar max-w-full">
+                <div class="flex flex-nowrap items-center">
+                    <button id="btn-servicos" onclick="showSection('servicos')" 
+                        class="tab-btn px-6 md:px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap">
+                        Serviços
+                    </button>
+                    <button id="btn-barbeiros" onclick="showSection('barbeiros')" 
+                        class="tab-btn px-6 md:px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap">
+                        Barbeiros
+                    </button>
+                    <button id="btn-usuarios" onclick="showSection('usuarios')" 
+                        class="tab-btn px-6 md:px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap">
+                        Usuários
+                    </button>
+                    <button id="btn-agenda" onclick="showSection('agenda')" 
+                        class="tab-btn px-6 md:px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap">
+                        Agenda
+                    </button>
+                    <button id="btn-feriados" onclick="showSection('feriados')" 
+                        class="tab-btn px-6 md:px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap">
+                        Feriados
+                    </button>
+                </div>
+            </div>
         </div>
 
-<!-- SEÇÃO: SERVIÇOS (Padronizada com Barbeiros) -->
-    <div id="section-servicos" class="hidden mt-12 grid md:grid-cols-3 gap-10">
-        <!-- Card de Cadastro -->
+    <!-- SEÇÃO: SERVIÇOS -->
+    <div id="section-servicos" class="mt-12 grid md:grid-cols-3 gap-10">
+        
+        <!-- CARD DE CADASTRO -->
         <div class="bg-[#0a0a0a] p-8 rounded-3xl border border-white/5 h-fit shadow-2xl">
             <h3 class="text-xl font-bold mb-6 text-white uppercase tracking-tight">Novo Serviço</h3>
             <form action="/admin/add-service" method="POST" class="space-y-4">
-                <input type="text" name="name" placeholder="Nome" required class="w-full bg-black border border-white/10 p-4 rounded-xl focus:border-cyan-400 outline-none text-white">
-                <input type="number" name="price" placeholder="Preço" step="0.01" required class="w-full bg-black border border-white/10 p-4 rounded-xl focus:border-cyan-400 outline-none text-white">
-                <button type="submit" class="w-full btn-arena">Salvar</button>
+                <input type="text" name="name" placeholder="Nome do Serviço" required class="w-full bg-black border border-white/10 p-4 rounded-xl focus:border-cyan-400 outline-none text-white transition">
+                <input type="number" name="price" placeholder="Preço (Ex: 60.00)" step="0.01" required class="w-full bg-black border border-white/10 p-4 rounded-xl focus:border-cyan-400 outline-none text-white transition">
+                
+                <!-- Duração -->
+                <div>
+                    <label class="text-[9px] uppercase tracking-widest text-gray-500 font-bold ml-1">Duração (em minutos)</label>
+                    <input type="number" name="duration" placeholder="Ex: 60 (para 1h)" required class="w-full bg-black border border-white/10 p-4 rounded-xl focus:border-cyan-400 outline-none text-white transition mt-1">
+                </div>
+
+                <button type="submit" class="w-full btn-arena">Salvar Serviço</button>
             </form>
         </div>
-        
-        <!-- Lista de Serviços (Cards de Gestão) -->
+
+        <!-- LISTA DE SERVIÇOS -->
         <div class="md:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-6">
             {% for s in servicos %}
             <div id="service-{{s.id}}" class="bg-[#0a0a0a] p-8 rounded-3xl border border-white/5 group hover:border-cyan-400/50 transition-all duration-500">
                 <form action="/admin/edit-service/{{s.id}}" method="POST">
-                    <div class="mb-6">
-                        <label class="text-[9px] uppercase tracking-widest text-gray-500 font-bold">Nome do Serviço</label>
+                    <div class="mb-4">
+                        <label class="text-[9px] uppercase tracking-widest text-gray-500 font-bold">Nome</label>
                         <input type="text" name="name" value="{{ s.name }}" class="bg-transparent border-b border-white/5 w-full font-bold uppercase tracking-[1px] text-white focus:text-cyan-400 focus:border-cyan-400 outline-none pb-1 transition mt-1">
                     </div>
                     
-                    <div class="mb-8">
-                        <label class="text-[9px] uppercase tracking-widest text-gray-500 font-bold">Valor do Serviço</label>
-                        <div class="flex items-center text-cyan-400 font-bold mt-1">
-                            <span class="mr-1">R$</span>
-                            <input type="number" name="price" value="{{ s.price }}" step="0.01" class="bg-transparent border-b border-white/5 w-full outline-none focus:text-white transition pb-1">
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div>
+                            <label class="text-[9px] uppercase tracking-widest text-gray-500 font-bold">Preço (R$)</label>
+                            <input type="number" name="price" value="{{ s.price }}" step="0.01" class="bg-transparent border-b border-white/5 w-full font-bold text-cyan-400 focus:text-white outline-none transition pb-1 mt-1">
+                        </div>
+                        <div>
+                            <label class="text-[9px] uppercase tracking-widest text-gray-500 font-bold">Tempo (min)</label>
+                            <input type="number" name="duration" value="{{ s.duration }}" class="bg-transparent border-b border-white/5 w-full font-bold text-cyan-400 focus:text-white outline-none transition pb-1 mt-1">
                         </div>
                     </div>
 
@@ -207,6 +224,31 @@
         </div>
     </div>
 
+    <!-- SEÇÃO: FERIADOS -->
+    <div id="section-feriados" class="hidden mt-12 grid md:grid-cols-3 gap-10">
+        <div class="bg-[#0a0a0a] p-8 rounded-3xl border border-white/5 h-fit shadow-2xl">
+            <h3 class="text-xl font-bold mb-6 text-white uppercase tracking-tight">Bloquear Data</h3>
+            <form action="/admin/add-holiday" method="POST" class="space-y-4">
+                <input type="date" name="date" required class="w-full bg-black border border-white/10 p-4 rounded-xl focus:border-cyan-400 outline-none text-white">
+                <input type="text" name="description" placeholder="Motivo (Ex: Natal, Reforma)" required class="w-full bg-black border border-white/10 p-4 rounded-xl focus:border-cyan-400 outline-none text-white">
+                <button type="submit" class="w-full btn-arena">Bloquear Dia</button>
+            </form>
+        </div>
+
+        <div class="md:col-span-2 space-y-4">
+            <h3 class="text-xl font-bold mb-6 text-white uppercase tracking-tight">Datas Bloqueadas</h3>
+            {% for h in feriados %}
+            <div id="holiday-{{h.id}}" class="flex justify-between items-center bg-white/5 p-6 rounded-2xl border border-white/5">
+                <div>
+                    <span class="font-bold text-white">{{ h.date.strftime('%d/%m/%Y') }}</span>
+                    <p class="text-cyan-400 text-xs uppercase tracking-widest">{{ h.description }}</p>
+                </div>
+                <button onclick="deleteItem('holiday', '{{h.id}}')" class="text-red-500 text-[10px] font-bold uppercase">Remover</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
 </section>
 
 <script>
@@ -216,6 +258,8 @@ function showSection(name) {
     document.getElementById('section-servicos').classList.add('hidden');
     document.getElementById('section-barbeiros').classList.add('hidden');
     document.getElementById('section-usuarios').classList.add('hidden');
+    document.getElementById('section-agenda').classList.add('hidden');
+    document.getElementById('section-feriados').classList.add('hidden');    
     
     // Mostra a seção clicada
     document.getElementById('section-' + name).classList.remove('hidden');
@@ -233,31 +277,24 @@ function showSection(name) {
 
 // Função AJAX para deletar itens sem recarregar a página
 async function deleteItem(type, id) {
-    if(!confirm("Tem certeza que deseja excluir permanentemente?")) return;
+    // Agora usamos a função global que criamos
+    const confirmed = await arenaConfirm("Esta ação removerá o registro permanentemente.");
+    if(!confirmed) return;
 
     try {
-        // Mudamos para enviar via POST caso o DELETE seja bloqueado por algum motivo
-        const response = await fetch(`/admin/delete-${type}/${id}`, { 
-            method: 'POST', // POST é mais aceito em servidores simples
-            headers: { 'Content-Type': 'application/json' }
-        });
-        
+        const response = await fetch(`/admin/delete-${type}/${id}`, { method: 'POST' });
         const result = await response.json();
 
         if(result.success) {
             const element = document.getElementById(`${type}-${id}`);
-            element.style.transition = 'all 0.5s ease';
             element.style.opacity = '0';
-            element.style.transform = 'translateX(30px)';
             setTimeout(() => element.remove(), 500);
         } else {
-            // Aqui ele vai mostrar o erro do banco (ex: agendamento vinculado)
-            alert("Atenção: " + result.error);
+            // Em vez de alert(), usamos o nosso aviso customizado!
+            arenaAlert(result.error, 'danger');
         }
     } catch (err) {
-        // Se cair aqui, é porque o servidor nem respondeu ou o Python deu erro fatal
-        console.error("Erro técnico:", err);
-        alert("Erro de conexão. Verifique se o servidor Python ainda está rodando no terminal.");
+        arenaAlert("Erro de conexão com a Arena.", 'danger');
     }
 }
 

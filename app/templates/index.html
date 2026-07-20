@@ -37,16 +37,29 @@
         </h2>
 
         <div class="grid md:grid-cols-2 gap-x-20 gap-y-12">
-            {% for servico in servicos %}
-            <div class="service-item group">
-                <div class="flex justify-between items-center mb-2">
-                    <h3 class="text-lg md:text-xl font-bold group-hover:text-cyan-400 transition">{{ servico.name }}</h3>
-                    <div class="service-line"></div>
-                    <span class="text-cyan-400 font-bold">R$ {{ "%.2f"|format(servico.price) }}</span> <!-- AQUI ESTAVA O ERRO! AGORA É 'servico.price' -->
-                </div>
-                <p class="text-gray-500 text-[10px] md:text-[12px] uppercase tracking-[1px]">{{ servico.description }}</p>
+        {% for servico in servicos %}
+        <div class="service-item group">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-lg md:text-xl font-bold group-hover:text-cyan-400 transition">{{ servico.name }}</h3>
+                <div class="service-line"></div>
+                <span class="text-cyan-400 font-bold">R$ {{ "%.2f"|format(servico.price) }}</span>
             </div>
-            {% endfor %}
+            
+            <!-- AQUI ESTÁ A MÁGICA: Substituímos a descrição pelo TEMPO -->
+            <p class="text-gray-500 text-[10px] md:text-[11px] uppercase tracking-[2px] font-medium">
+                <i class="far fa-clock mr-1"></i> <!-- Opcional: ícone de relógio -->
+                {% if servico.duration < 60 %}
+                    {{ servico.duration }} MINUTOS
+                {% else %}
+                    {% set horas = (servico.duration // 60) %}
+                    {% set minutos = (servico.duration % 60) %}
+                    
+                    {{ horas }} {% if horas > 1 %}HORAS{% else %}HORA{% endif %}
+                    {% if minutos > 0 %}{{ minutos }} MIN{% endif %}
+                {% endif %}
+            </p>
+        </div>
+        {% endfor %}
         </div>
     </div>
 </section>
